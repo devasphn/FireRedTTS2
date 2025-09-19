@@ -1,0 +1,266 @@
+{
+  "runpod_deployment": {
+    "name": "FireRedTTS2 Speech-to-Speech System",
+    "description": "Advanced TTS system with multi-speaker dialogue, voice cloning, and real-time conversation capabilities",
+    "version": "1.0.0",
+    
+    "container_config": {
+      "image": "fireredtts2:runpod",
+      "dockerfile": "Dockerfile",
+      "base_image": "nvidia/cuda:11.8-devel-ubuntu22.04",
+      "python_version": "3.11"
+    },
+    
+    "hardware_requirements": {
+      "gpu": {
+        "minimum": {
+          "type": "RTX 3080",
+          "vram_gb": 10,
+          "compute_capability": "8.6"
+        },
+        "recommended": {
+          "type": "RTX 4090",
+          "vram_gb": 24,
+          "compute_capability": "8.9"
+        },
+        "optimal": {
+          "type": "A100",
+          "vram_gb": 40,
+          "compute_capability": "8.0"
+        }
+      },
+      "memory": {
+        "minimum_gb": 16,
+        "recommended_gb": 32,
+        "optimal_gb": 64
+      },
+      "storage": {
+        "container_disk_gb": 50,
+        "persistent_volume_gb": 100,
+        "model_storage_gb": 20,
+        "cache_storage_gb": 10
+      },
+      "cpu": {
+        "minimum_cores": 4,
+        "recommended_cores": 8,
+        "optimal_cores": 16
+      }
+    },
+    
+    "network_config": {
+      "primary_port": 7860,
+      "protocol": "HTTP",
+      "websocket_support": true,
+      "health_check_port": 8080,
+      "exposed_ports": [7860, 8080],
+      "runpod_proxy_compatible": true
+    },
+    
+    "environment_variables": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "PYTHONPATH": "/workspace",
+      "TORCH_HOME": "/workspace/cache/torch",
+      "HF_HOME": "/workspace/cache/huggingface",
+      "TRANSFORMERS_CACHE": "/workspace/cache/transformers",
+      "GRADIO_SERVER_NAME": "0.0.0.0",
+      "GRADIO_SERVER_PORT": "7860",
+      "PYTORCH_CUDA_ALLOC_CONF": "max_split_size_mb:512",
+      "OMP_NUM_THREADS": "4",
+      "MKL_NUM_THREADS": "4",
+      "CUDA_LAUNCH_BLOCKING": "0"
+    },
+    
+    "model_configuration": {
+      "base_path": "/workspace/models/FireRedTTS2",
+      "required_files": [
+        "config_llm.json",
+        "config_codec.json",
+        "llm_pretrain.pt",
+        "llm_posttrain.pt", 
+        "codec.pt",
+        "Qwen2.5-1.5B"
+      ],
+      "download_source": "https://huggingface.co/FireRedTeam/FireRedTTS2",
+      "total_size_gb": 15,
+      "cache_enabled": true
+    },
+    
+    "performance_settings": {
+      "gpu_memory_fraction": 0.9,
+      "max_sequence_length": 3100,
+      "batch_size": 1,
+      "temperature": 0.9,
+      "top_k": 30,
+      "streaming_enabled": true,
+      "first_packet_latency_ms": 140
+    },
+    
+    "application_config": {
+      "interface_type": "gradio",
+      "enhanced_features": [
+        "real_time_audio_io",
+        "speech_to_speech_conversation", 
+        "voice_cloning",
+        "multi_speaker_dialogue",
+        "performance_monitoring",
+        "websocket_streaming"
+      ],
+      "supported_languages": [
+        "English", "Chinese", "Japanese", 
+        "Korean", "French", "German", "Russian"
+      ],
+      "audio_formats": {
+        "input": ["wav", "mp3", "flac", "webm"],
+        "output": ["wav"],
+        "sample_rates": {
+          "input": 16000,
+          "output": 24000,
+          "internal": 16000
+        }
+      }
+    },
+    
+    "monitoring": {
+      "health_check_enabled": true,
+      "metrics_collection": true,
+      "log_level": "INFO",
+      "log_files": [
+        "/workspace/logs/deployment.log",
+        "/workspace/logs/application.log",
+        "/workspace/logs/performance.log"
+      ],
+      "performance_metrics": [
+        "gpu_utilization",
+        "gpu_memory_usage",
+        "cpu_usage",
+        "memory_usage",
+        "disk_usage",
+        "network_latency",
+        "generation_latency",
+        "audio_quality"
+      ]
+    },
+    
+    "security": {
+      "input_validation": true,
+      "file_upload_restrictions": {
+        "max_file_size_mb": 100,
+        "allowed_extensions": [".wav", ".mp3", ".flac"],
+        "virus_scanning": false
+      },
+      "rate_limiting": {
+        "enabled": true,
+        "requests_per_minute": 60,
+        "concurrent_sessions": 10
+      },
+      "authentication": {
+        "required": false,
+        "type": "none"
+      }
+    },
+    
+    "deployment_steps": [
+      {
+        "step": 1,
+        "name": "System Setup",
+        "description": "Update system and install dependencies",
+        "commands": [
+          "apt-get update && apt-get upgrade -y",
+          "apt-get install -y git git-lfs wget curl htop nvtop"
+        ]
+      },
+      {
+        "step": 2,
+        "name": "Python Environment",
+        "description": "Install Python 3.11 and pip packages",
+        "commands": [
+          "add-apt-repository ppa:deadsnakes/ppa -y",
+          "apt-get install -y python3.11 python3.11-dev python3-pip",
+          "python3 -m pip install --upgrade pip setuptools wheel"
+        ]
+      },
+      {
+        "step": 3,
+        "name": "Repository Clone",
+        "description": "Clone FireRedTTS2 repository",
+        "commands": [
+          "cd /workspace",
+          "git clone https://github.com/FireRedTeam/FireRedTTS2.git",
+          "cd FireRedTTS2"
+        ]
+      },
+      {
+        "step": 4,
+        "name": "Dependencies Installation",
+        "description": "Install PyTorch and other dependencies",
+        "commands": [
+          "pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118",
+          "pip install -r requirements.txt",
+          "pip install -e ."
+        ]
+      },
+      {
+        "step": 5,
+        "name": "Model Download",
+        "description": "Download required models",
+        "commands": [
+          "git lfs install",
+          "cd /workspace/models",
+          "git clone https://huggingface.co/FireRedTeam/FireRedTTS2"
+        ]
+      },
+      {
+        "step": 6,
+        "name": "Environment Configuration",
+        "description": "Set up environment variables and directories",
+        "commands": [
+          "export PYTHONPATH=/workspace/FireRedTTS2",
+          "mkdir -p /workspace/cache /workspace/logs /workspace/uploads"
+        ]
+      },
+      {
+        "step": 7,
+        "name": "Application Launch",
+        "description": "Start the FireRedTTS2 application",
+        "commands": [
+          "python3 gradio_demo.py --pretrained-dir /workspace/models/FireRedTTS2 --host 0.0.0.0 --port 7860"
+        ]
+      }
+    ],
+    
+    "troubleshooting": {
+      "common_issues": [
+        {
+          "issue": "CUDA out of memory",
+          "solution": "Reduce batch size or use model quantization",
+          "commands": ["export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:256"]
+        },
+        {
+          "issue": "Model download fails",
+          "solution": "Check internet connection and git-lfs installation",
+          "commands": ["git lfs install", "git lfs pull"]
+        },
+        {
+          "issue": "Port 7860 not accessible",
+          "solution": "Check RunPod port configuration and firewall",
+          "commands": ["netstat -tlnp | grep 7860"]
+        },
+        {
+          "issue": "Slow model loading",
+          "solution": "Use persistent volume for model storage",
+          "commands": ["mount persistent volume at /workspace/models"]
+        }
+      ]
+    },
+    
+    "optimization_tips": [
+      "Use persistent volumes for model storage to avoid re-downloading",
+      "Enable GPU memory optimization with PYTORCH_CUDA_ALLOC_CONF",
+      "Set appropriate OMP_NUM_THREADS based on CPU cores",
+      "Use model quantization for memory-constrained environments",
+      "Enable streaming mode for real-time applications",
+      "Monitor GPU utilization with nvidia-smi",
+      "Use appropriate batch sizes based on available VRAM"
+    ]
+  }
+}
