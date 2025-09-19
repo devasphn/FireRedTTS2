@@ -1,0 +1,97 @@
+{
+  "monitoring": {
+    "gpu_monitoring_interval": 1.0,
+    "latency_monitoring_interval": 0.1,
+    "system_monitoring_interval": 5.0,
+    "optimization_check_interval": 30.0,
+    
+    "gpu_utilization_target": 80.0,
+    "gpu_memory_warning": 85.0,
+    "gpu_memory_critical": 95.0,
+    "latency_warning_ms": 500.0,
+    "latency_critical_ms": 1000.0,
+    "throughput_target_rps": 10.0,
+    
+    "enable_auto_optimization": true,
+    "enable_predictive_scaling": true,
+    "enable_adaptive_batching": true,
+    "enable_model_switching": true,
+    
+    "metrics_history_size": 10000,
+    "latency_samples_size": 1000,
+    "performance_window_minutes": 60,
+    
+    "performance_degradation_threshold": 0.2,
+    "alert_cooldown_minutes": 5
+  },
+  
+  "optimization": {
+    "enable_model_caching": true,
+    "max_cached_models": 3,
+    "model_cache_size_gb": 8.0,
+    "model_lazy_loading": true,
+    "model_preload_popular": true,
+    
+    "enable_gpu_optimization": true,
+    "gpu_memory_fraction": 0.9,
+    "enable_memory_growth": true,
+    "enable_gradient_checkpointing": true,
+    "enable_mixed_precision": true,
+    
+    "enable_audio_buffering": true,
+    "audio_buffer_size_ms": 1000,
+    "audio_chunk_size_ms": 100,
+    "max_audio_buffers": 10,
+    "enable_adaptive_buffering": true,
+    
+    "enable_connection_pooling": true,
+    "max_connections_per_pool": 20,
+    "connection_timeout_seconds": 30,
+    "pool_cleanup_interval_seconds": 300,
+    
+    "enable_batch_processing": true,
+    "max_batch_size": 8,
+    "batch_timeout_ms": 50,
+    "adaptive_batch_sizing": true,
+    
+    "max_worker_threads": 4,
+    "max_worker_processes": 2,
+    "enable_async_processing": true,
+    
+    "enable_result_caching": true,
+    "result_cache_size_mb": 500,
+    "cache_ttl_seconds": 3600
+  },
+  
+  "runpod_specific": {
+    "optimize_for_runpod": true,
+    "enable_persistent_volume_caching": true,
+    "gpu_memory_reserve_mb": 1024,
+    "network_optimization": true,
+    "container_resource_limits": {
+      "memory_gb": 32,
+      "cpu_cores": 8,
+      "gpu_memory_gb": 24
+    }
+  },
+  
+  "alerts": {
+    "enable_performance_alerts": true,
+    "alert_channels": ["log", "webhook"],
+    "webhook_url": null,
+    "alert_thresholds": {
+      "gpu_memory_critical": 95.0,
+      "latency_critical_ms": 2000.0,
+      "error_rate_critical": 0.1,
+      "throughput_degradation": 0.5
+    }
+  },
+  
+  "logging": {
+    "enable_performance_logging": true,
+    "log_level": "INFO",
+    "log_file": "/workspace/logs/performance.log",
+    "log_rotation_mb": 100,
+    "log_retention_days": 7
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "testing": {
+    "test_data_directory": "test_data",
+    "test_output_directory": "test_output",
+    "test_models_directory": "test_models",
+    
+    "api_testing": {
+      "base_url": "http://localhost:8000",
+      "websocket_url": "ws://localhost:8000/ws",
+      "test_timeout_seconds": 30,
+      "retry_attempts": 3,
+      "retry_delay_seconds": 1
+    },
+    
+    "performance_testing": {
+      "test_duration_seconds": 300,
+      "concurrent_users": 10,
+      "max_latency_ms": 2000,
+      "min_throughput_rps": 5,
+      "memory_limit_mb": 8000,
+      "cpu_limit_percent": 80
+    },
+    
+    "audio_testing": {
+      "sample_rate": 24000,
+      "test_duration_seconds": 5.0,
+      "quality_threshold": 0.8,
+      "supported_formats": ["wav", "mp3", "flac"],
+      "test_frequencies": [440, 880, 1760],
+      "noise_levels": [0.01, 0.05, 0.1]
+    },
+    
+    "browser_testing": {
+      "browsers": ["chrome", "firefox"],
+      "headless_mode": true,
+      "viewport_sizes": [
+        {"name": "desktop", "width": 1920, "height": 1080},
+        {"name": "laptop", "width": 1366, "height": 768},
+        {"name": "tablet", "width": 768, "height": 1024},
+        {"name": "mobile", "width": 375, "height": 667}
+      ],
+      "test_timeout_seconds": 30,
+      "page_load_timeout_seconds": 10
+    }
+  },
+  
+  "quality_assurance": {
+    "audio_quality": {
+      "min_pesq_score": 2.5,
+      "min_stoi_score": 0.8,
+      "max_thd_percent": 5.0,
+      "min_snr_db": 20.0,
+      "min_dynamic_range_db": 30.0
+    },
+    
+    "performance_thresholds": {
+      "max_response_time_ms": 2000,
+      "min_throughput_rps": 5.0,
+      "max_memory_usage_mb": 8000,
+      "max_cpu_usage_percent": 80.0,
+      "max_gpu_memory_percent": 95.0
+    },
+    
+    "user_experience": {
+      "max_page_load_time_seconds": 5.0,
+      "min_ui_responsiveness_score": 0.8,
+      "max_error_rate_percent": 1.0,
+      "min_accessibility_score": 0.8
+    },
+    
+    "system_requirements": {
+      "min_python_version": "3.8",
+      "min_memory_gb": 8,
+      "min_cpu_cores": 4,
+      "min_disk_space_gb": 20,
+      "require_cuda": true,
+      "min_gpu_memory_gb": 6
+    },
+    
+    "quality_gates": {
+      "overall_threshold": 0.85,
+      "audio_quality_weight": 0.4,
+      "performance_weight": 0.3,
+      "user_experience_weight": 0.2,
+      "system_compatibility_weight": 0.1
+    }
+  },
+  
+  "ci_cd": {
+    "enable_automated_testing": true,
+    "test_on_commit": true,
+    "test_on_pull_request": true,
+    "test_on_deploy": true,
+    "parallel_test_execution": true,
+    "max_test_duration_minutes": 60,
+    
+    "notification_settings": {
+      "enable_notifications": true,
+      "notification_channels": ["email", "slack"],
+      "notify_on_failure": true,
+      "notify_on_success": false,
+      "notify_on_quality_gate_failure": true
+    },
+    
+    "artifact_management": {
+      "save_test_reports": true,
+      "save_performance_metrics": true,
+      "save_audio_samples": true,
+      "retention_days": 30,
+      "compress_artifacts": true
+    }
+  },
+  
+  "reporting": {
+    "generate_html_reports": true,
+    "generate_json_reports": true,
+    "generate_junit_xml": true,
+    "include_screenshots": true,
+    "include_audio_samples": true,
+    "include_performance_graphs": true,
+    
+    "dashboard_settings": {
+      "enable_dashboard": true,
+      "update_interval_seconds": 30,
+      "show_trends": true,
+      "show_comparisons": true,
+      "alert_on_degradation": true
+    }
+  },
+  
+  "security_testing": {
+    "enable_security_tests": true,
+    "test_input_validation": true,
+    "test_authentication": true,
+    "test_rate_limiting": true,
+    "test_file_upload_security": true,
+    "vulnerability_scanning": true
+  },
+  
+  "load_testing": {
+    "enable_load_testing": true,
+    "ramp_up_duration_seconds": 60,
+    "steady_state_duration_seconds": 300,
+    "ramp_down_duration_seconds": 60,
+    "max_virtual_users": 100,
+    "target_rps": 50,
+    "acceptable_error_rate": 0.01
+  }
+}
